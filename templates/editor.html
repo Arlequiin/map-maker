@@ -41,16 +41,35 @@ Live coordinate : <a id="coordinate"></a>
         <b>Selected element </b> : <img id="cropped-image">
         <br>
         <hr>
-        <div id="container-canva"></div>
+
+        <div id="container-canva" style="position:absolute"></div>
     <script>
+      let alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
       const container = document.getElementById("container-canva");
       for(let i = 0; i < 50; i++) {
         for(let j = 0; j < 40; j++) {
           const tile = document.createElement("div");
+          tile.setAttribute("id", `${alphabet[i]}${j}`);
+          tile.setAttribute("onclick", `setSelected('${alphabet[i]}${j}')`);
           tile.classList.add("tile");
           container.appendChild(tile);
         }
       }
+
+      function setSelected(id) {
+  const selectedTile = document.getElementById(id);
+  console.log(selectedTile);
+  const croppedImage = document.getElementById("cropped-image");
+  console.log(croppedImage);
+  if (croppedImage.complete) {
+    selectedTile.style.backgroundImage = `url(${croppedImage.src})`;
+  } else {
+    croppedImage.onload = function() {
+      selectedTile.style.backgroundImage = `url(${croppedImage.src})`;
+    }
+  }
+}
+
     </script>
       </div>
     </div>
