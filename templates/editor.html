@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Map Maker</title>
+    <link rel="stylesheet" href="/static/editor/style.css">
+    <script src="/static/editor/script.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="left">
+        <a class="headline">Tileset</a>
+        <select onchange="syncImage()" id="drop">
+            {% for tileset in tilesets %}
+            <option value="{{tileset}}">{{tileset[:-4].capitalize()}}</option>
+            {% endfor %}
+          </select>
+        <br>
+
+<div style="overflow:scroll;height:500px">
+    <img src="/static/data/tilesets/images/{{tilesets[0]}}" id="tileset" onclick="getXY()">
+</div>
+
+<br>
+Live coordinate : <a id="coordinate"></a>
+<script>
+    const image = document.getElementById("tileset");
+    const coordinates = document.getElementById("coordinate");
+
+    image.addEventListener("mousemove", function(event) {
+        const x = event.offsetX;
+        const y = event.offsetY;
+
+        coordinates.innerHTML = `X: ${x}, Y: ${y}`;
+    });
+</script>
+
+</div>
+      <div class="right">
+        <a class="headline">Map</a>
+        <hr>
+        <b>Selected element </b> :
+        <br>
+        <hr>
+
+      </div>
+    </div>
+  </body>
+</html>
