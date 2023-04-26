@@ -16,8 +16,8 @@
           </select>
         <br>
 
-<div style="overflow:scroll;height:500px">
-    <img src="/static/data/tilesets/images/{{tilesets[0]}}" id="tileset" onclick="getXY()">
+<div style="height:600px;overflow:scroll;">
+        <img src="/static/data/tilesets/images/{{tilesets[0]}}" id="tileset" onclick="getXY(16)" ondblclick="getXY(parseInt(prompt('How many tiles do you wish to select?'))*16)">
 </div>
 
 <br>
@@ -41,7 +41,17 @@ Live coordinate : <a id="coordinate"></a>
         <b>Selected element </b> : <img id="cropped-image">
         <br>
         <hr>
-
+        <div id="container-canva"></div>
+    <script>
+      const container = document.getElementById("container-canva");
+      for(let i = 0; i < 50; i++) {
+        for(let j = 0; j < 40; j++) {
+          const tile = document.createElement("div");
+          tile.classList.add("tile");
+          container.appendChild(tile);
+        }
+      }
+    </script>
       </div>
     </div>
   </body>

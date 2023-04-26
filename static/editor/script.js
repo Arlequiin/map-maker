@@ -21,7 +21,7 @@ function getSelection() {
     .catch(error => console.error(error));
 }
 
-function getXY() {
+function getXY(tilesize) {
     const image = document.getElementById("tileset");
     const coordinates = document.getElementById("coordinate");
     let dropdown = document.getElementById('drop').value
@@ -29,7 +29,7 @@ function getXY() {
         const x = event.offsetX;
         const y = event.offsetY;
         console.log([x,y])
-        fetch(`/selection/${x}/${y}/${dropdown}`)
+        fetch(`/selection/${x}/${y}/${dropdown}/${tilesize}`)
         .then(response => response.json())
         .then(data => {
             console.log(data);

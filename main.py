@@ -6,19 +6,20 @@ import base64
 app = Flask(__name__)
 
 
-def round_to_16(num):
-    return int(16 * math.ceil(float(num) / 16))
+def round_to(rounded,num):
+    return int(rounded * math.ceil(float(num) / rounded))
 
 @app.route("/")
 def index():
     tilesets = os.listdir('static/data/tilesets/images/')
     return render_template("editor.html",tilesets=tilesets)
 
-@app.route("/selection/<string:x>/<string:y>/<string:option>")
-def get_selection(x,y,option):
-    x,y = round_to_16(int(x)), round_to_16(int(y))
+@app.route("/selection/<string:x>/<string:y>/<string:option>/<string:tilesize>")
+def get_selection(x,y,option,tilesize):
+    tilesize=int(tilesize)
+    x,y = round_to(tilesize,int(x)), round_to(tilesize,int(y))
     img = Image.open('static/data/tilesets/images/'+option)
-    box = (x-16, y-16, x, y)
+    box = (x-tilesize, y-tilesize, x, y)
     cropped_img = img.crop(box)
     bytes_io = BytesIO()
     cropped_img.save(bytes_io, format='PNG')
