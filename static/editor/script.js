@@ -26,15 +26,19 @@ function getXY() {
     const coordinates = document.getElementById("coordinate");
     let dropdown = document.getElementById('drop').value
     function handleMouseMove(event) {
-      const x = event.offsetX;
-      const y = event.offsetY;
-      console.log([x,y])
-      fetch(`/selection/${x}/${y}/${dropdown}`)
-    .then(response => response.json())
-    .then(data => console.log(data))
-    .catch(error => console.error(error));
-      image.removeEventListener("mousemove", handleMouseMove);
+        const x = event.offsetX;
+        const y = event.offsetY;
+        console.log([x,y])
+        fetch(`/selection/${x}/${y}/${dropdown}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            // Set the src attribute of the <img> element to the base64-encoded image data
+            const img = document.getElementById("cropped-image");
+            img.src = `data:image/jpeg;base64,${data.image_data}`;
+        })
+        .catch(error => console.error(error));
+        image.removeEventListener("mousemove", handleMouseMove);
     }
     image.addEventListener("mousemove", handleMouseMove);
-  }
-  
+}
