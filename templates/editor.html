@@ -43,7 +43,8 @@ Live coordinate : <a id="coordinate"></a>
 <label for="grid">Grid</label>
 <input type="checkbox" id="draw" checked>
 <label for="draw">Draw mode (Shortcut : P)</label>
-<button onclick="fill()">Fill</button> Mode : <select id="tile_mode"><option value="middle">Middle tile</option><option value="upper">Upper tile</option></select><button onclick="exportMap()">Export</button>
+<button onclick="fill()">Fill</button> Mode : <select id="tile_mode"><option value="middle">Middle tile</option><option value="upper">Upper tile</option></select><button id="importButton">Import</button>
+<button onclick="exportMap()">Export</button>
 </div>
 
         <br>
@@ -95,6 +96,24 @@ function setSelected(id) {
 }
 }
 
+document.getElementById('importButton').addEventListener('click', function() {
+  let fileInput = document.createElement('input');
+  fileInput.type = 'file';
+  fileInput.onchange = function(event) {
+    let file = event.target.files[0];
+    let reader = new FileReader();
+    reader.onload = function(event) {
+      let fileContent = event.target.result;
+      console.log(fileContent);
+    }
+    reader.readAsText(file);
+  };
+
+  // Trigger a click event on the file input element
+  fileInput.click();
+});
+
+
 function setDrawMode(id){
     let draw = document.getElementById("draw").checked;
     if (draw){
@@ -119,12 +138,14 @@ function fill() {
     if (is_grid) {
       tiles.forEach(tile => {
         tile.style.backgroundImage = `url(${croppedImage.src})`;
+        console.log(tile.getElementsByTagName('img').src)
         tile.getElementsByTagName('img').src = ''
         tile.classList.add("M"+document.getElementById("drop").value+"["+croppedImage.classList[0]+"],");
       });
     } else {
       tiles.forEach(tile => {
         tile.style.backgroundImage = `url(${croppedImage.src})`;
+        console.log(tile.getElementsByTagName('img').src)
         tile.getElementsByTagName('img').src = ''
         tile.classList.add("M"+document.getElementById("drop").value+"["+croppedImage.classList[0]+"],");
       });
@@ -136,7 +157,7 @@ function fill() {
   const tiles = document.querySelectorAll('.tile');
   let map = '';
   tiles.forEach(tile => {
-    map = map + ' ' + tile.classList[1];
+    map = map + ' ' + tile.classList;
   });
 
   const blob = new Blob([map], { type: 'text/plain' });
@@ -147,6 +168,9 @@ function fill() {
   a.click();
 }
 
+function importMap() {
+  
+}
   
 
     </script>
