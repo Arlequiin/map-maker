@@ -99,20 +99,7 @@ function setSelected(id) {
 }
 
 document.getElementById('importButton').addEventListener('click', function() {
-  let fileInput = document.createElement('input');
-  fileInput.type = 'file';
-  fileInput.onchange = function(event) {
-    let file = event.target.files[0];
-    let reader = new FileReader();
-    reader.onload = function(event) {
-      let fileContent = event.target.result;
-      console.log(fileContent);
-    }
-    reader.readAsText(file);
-  };
-
-  // Trigger a click event on the file input element
-  fileInput.click();
+  importMap()
 });
 
 
@@ -169,7 +156,30 @@ function fill() {
 }
 
 function importMap() {
-  
+  Clear();
+  let fileInput = document.createElement('input');
+  fileInput.type = 'file';
+  fileInput.onchange = function(event) {
+    let file = event.target.files[0];
+    let reader = new FileReader();
+    reader.onload = function(event) {
+      let fileContent = event.target.result;
+      fileContent = fileContent.toString();
+      fileContent = fileContent.split("tile");
+      for(let i = 1; i<fileContent.length; i++){
+        fileContent[i]=fileContent[i].replace("],","|")
+        fileContent[i]=fileContent[i].split("|")
+        fileContent[i][0]=fileContent[i][0]+']'
+        console.log(fileContent[i])
+      }
+      const tiles = document.querySelectorAll('.tile');
+      tiles.forEach(tile => {
+        // plus tard
+      });
+    };
+    reader.readAsText(file);
+  };
+  fileInput.click();
 }
 
 function Clear(){

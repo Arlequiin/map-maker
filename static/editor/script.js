@@ -40,8 +40,9 @@ function getXY(tilesize) {
         .catch(error => console.error(error));
         image.removeEventListener("mousemove", handleMouseMove);
     }
-    image.addEventListener("mousemove", handleMouseMove);
+    image.addEventListener("mousemove", handleMouseMove); 
 }
+
 
 function updateGrid() {
     const is_grid = document.getElementById('grid').checked;
@@ -58,15 +59,6 @@ function updateGrid() {
     }
   }
   
-function generateHtml() {
-  var html = document.querySelector('.editor').innerHTML;
-  var textarea = document.createElement('textarea');
-  textarea.textContent = html;
-  document.body.appendChild(textarea);
-  textarea.select();
-  document.execCommand('copy');
-  document.body.removeChild(textarea);
-  alert('Code HTML copié dans le presse-papier!');
-}
+
 //faire un fetch, un get answer pour regexer l'html et renvoyer une matrice de type [A51, A10...]
 
