@@ -15,7 +15,6 @@
             {% endfor %}
           </select>
         <br>
-
 <div style="height:600px;overflow:scroll;">
         <img src="/static/data/tilesets/images/{{tilesets[0]}}" id="tileset" onclick="getXY(16)" ondblclick="getXY(parseInt(prompt('How many tiles do you wish to select?'))*16)">
 </div>
@@ -38,7 +37,15 @@ Live coordinate : <a id="coordinate"></a>
       <div class="right">
         <a class="headline">Map</a>
         <hr>
-        <b>Selected element </b> : <img id="cropped-image">
+        <b>Selected element </b> : <img id="cropped-image"><br>
+        <div>
+        <input type="checkbox" id="grid" onchange="updateGrid()" checked>
+<label for="grid">Grid</label>
+<input type="checkbox" id="draw" checked>
+<label for="draw">Draw mode (Shortcut : P)</label>
+<button onclick="fill()">Fill</button> Mode : <select id="tile_mode"><option value="middle">Middle tile</option><option value="upper">Upper tile</option></select>
+</div>
+
         <br>
         <hr>
 
@@ -50,25 +57,72 @@ Live coordinate : <a id="coordinate"></a>
         for(let j = 0; j < 40; j++) {
           const tile = document.createElement("div");
           tile.setAttribute("id", `${alphabet[i]}${j}`);
+          tile.setAttribute("onmouseout", `setDrawMode('${alphabet[i]}${j}')`);
           tile.setAttribute("onclick", `setSelected('${alphabet[i]}${j}')`);
           tile.classList.add("tile");
           container.appendChild(tile);
+          const image = document.createElement('img');
+          tile.appendChild(image)
         }
       }
 
-      function setSelected(id) {
+function setSelected(id) {
   const selectedTile = document.getElementById(id);
-  console.log(selectedTile);
   const croppedImage = document.getElementById("cropped-image");
-  console.log(croppedImage);
-  if (croppedImage.complete) {
-    selectedTile.style.backgroundImage = `url(${croppedImage.src})`;
-  } else {
-    croppedImage.onload = function() {
+  if (document.getElementById("tile_mode").value == "middle"){
+    if (croppedImage.complete) {
       selectedTile.style.backgroundImage = `url(${croppedImage.src})`;
+  } else {
+      croppedImage.onload = function() {
+        selectedTile.style.backgroundImage = `url(${croppedImage.src})`;
+      }
+  }
+  } else {
+    const image = selectedTile.getElementsByTagName('img')[0];
+    console.log(image.innerHTML)
+    if (croppedImage.complete) {
+      image.src = croppedImage.src;
+    } else {
+      croppedImage.onload = function() {
+      image.src = croppedImage.src;
+      }
+  }
+
+}
+}
+
+function setDrawMode(id){
+    let draw = document.getElementById("draw").checked;
+    if (draw){
+        setSelected(id)
+    }
+}
+document.addEventListener('keydown', evt => {
+    if (evt.key === 'P' || evt.key == 'p') {
+        toggleDrawMode();
+    }
+});
+
+function toggleDrawMode(event) {
+    const drawCheckbox = document.getElementById('draw');
+    drawCheckbox.checked = !drawCheckbox.checked;
+}
+
+function fill() {
+    const is_grid = document.getElementById('grid').checked;
+    const tiles = document.querySelectorAll('.tile');
+    const croppedImage = document.getElementById("cropped-image");
+    if (is_grid) {
+      tiles.forEach(tile => {
+        tile.style.backgroundImage = `url(${croppedImage.src})`;
+      });
+    } else {
+      tiles.forEach(tile => {
+        tile.style.backgroundImage = `url(${croppedImage.src})`;
+      });
     }
   }
-}
+  
 
     </script>
       </div>

@@ -42,3 +42,19 @@ function getXY(tilesize) {
     }
     image.addEventListener("mousemove", handleMouseMove);
 }
+
+function updateGrid() {
+    const is_grid = document.getElementById('grid').checked;
+    const tiles = document.querySelectorAll('.tile');
+    
+    if (is_grid) {
+      tiles.forEach(tile => {
+        tile.style.border = '1px solid #0000ff';
+      });
+    } else {
+      tiles.forEach(tile => {
+        tile.style.border = 'none';
+      });
+    }
+  }
+  

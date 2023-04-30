@@ -14,7 +14,7 @@ def index():
     tilesets = os.listdir('static/data/tilesets/images/')
     return render_template("editor.html",tilesets=tilesets)
 
-@app.route("/selection/<string:x>/<string:y>/<string:option>/<string:tilesize>")
+@app.route("/selection/<string:x>/<string:y>/<string:option>/<string:tilesize>/")
 def get_selection(x,y,option,tilesize):
     tilesize=int(tilesize)
     x,y = round_to(tilesize,int(x)), round_to(tilesize,int(y))
