@@ -115,10 +115,12 @@ function fill() {
     if (is_grid) {
       tiles.forEach(tile => {
         tile.style.backgroundImage = `url(${croppedImage.src})`;
+        tile.getElementsByTagName('img').src = ''
       });
     } else {
       tiles.forEach(tile => {
         tile.style.backgroundImage = `url(${croppedImage.src})`;
+        tile.getElementsByTagName('img').src = ''
       });
     }
   }
