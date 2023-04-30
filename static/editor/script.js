@@ -33,9 +33,9 @@ function getXY(tilesize) {
         .then(response => response.json())
         .then(data => {
             console.log(data);
-            // Set the src attribute of the <img> element to the base64-encoded image data
             const img = document.getElementById("cropped-image");
             img.src = `data:image/jpeg;base64,${data.image_data}`;
+            img.classList.add(data.box)
         })
         .catch(error => console.error(error));
         image.removeEventListener("mousemove", handleMouseMove);
@@ -58,3 +58,15 @@ function updateGrid() {
     }
   }
   
+function generateHtml() {
+  var html = document.querySelector('.editor').innerHTML;
+  var textarea = document.createElement('textarea');
+  textarea.textContent = html;
+  document.body.appendChild(textarea);
+  textarea.select();
+  document.execCommand('copy');
+  document.body.removeChild(textarea);
+  alert('Code HTML copié dans le presse-papier!');
+}
+//faire un fetch, un get answer pour regexer l'html et renvoyer une matrice de type [A51, A10...]
+

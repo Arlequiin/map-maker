@@ -11,7 +11,7 @@ def round_to(rounded,num):
 
 @app.route("/")
 def index():
-    tilesets = os.listdir('static/data/tilesets/images/')
+    tilesets = sorted(os.listdir('static/data/tilesets/images/'))
     return render_template("editor.html",tilesets=tilesets)
 
 @app.route("/selection/<string:x>/<string:y>/<string:option>/<string:tilesize>/")

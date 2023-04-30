@@ -43,13 +43,13 @@ Live coordinate : <a id="coordinate"></a>
 <label for="grid">Grid</label>
 <input type="checkbox" id="draw" checked>
 <label for="draw">Draw mode (Shortcut : P)</label>
-<button onclick="fill()">Fill</button> Mode : <select id="tile_mode"><option value="middle">Middle tile</option><option value="upper">Upper tile</option></select>
+<button onclick="fill()">Fill</button> Mode : <select id="tile_mode"><option value="middle">Middle tile</option><option value="upper">Upper tile</option></select><button onclick="exportMap()">Export</button>
 </div>
 
         <br>
         <hr>
-
         <div id="container-canva" style="position:absolute"></div>
+    
     <script>
       let alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
       const container = document.getElementById("container-canva");
@@ -66,25 +66,29 @@ Live coordinate : <a id="coordinate"></a>
         }
       }
 
+
 function setSelected(id) {
   const selectedTile = document.getElementById(id);
   const croppedImage = document.getElementById("cropped-image");
   if (document.getElementById("tile_mode").value == "middle"){
     if (croppedImage.complete) {
       selectedTile.style.backgroundImage = `url(${croppedImage.src})`;
+      selectedTile.classList.add("M"+document.getElementById("drop").value+"["+croppedImage.classList[0]+"],");
   } else {
       croppedImage.onload = function() {
         selectedTile.style.backgroundImage = `url(${croppedImage.src})`;
+        selectedTile.classList.add("M"+document.getElementById("drop").value+"["+croppedImage.classList[0]+"],");
       }
-  }
+  } 
   } else {
     const image = selectedTile.getElementsByTagName('img')[0];
-    console.log(image.innerHTML)
     if (croppedImage.complete) {
       image.src = croppedImage.src;
+      selectedTile.classList.add("U"+document.getElementById("drop").value+"["+croppedImage.classList[0]+"],");
     } else {
       croppedImage.onload = function() {
       image.src = croppedImage.src;
+      selectedTile.classList.add("U"+document.getElementById("drop").value+"["+croppedImage.classList[0]+"],");
       }
   }
 
@@ -116,17 +120,37 @@ function fill() {
       tiles.forEach(tile => {
         tile.style.backgroundImage = `url(${croppedImage.src})`;
         tile.getElementsByTagName('img').src = ''
+        tile.classList.add("M"+document.getElementById("drop").value+"["+croppedImage.classList[0]+"],");
       });
     } else {
       tiles.forEach(tile => {
         tile.style.backgroundImage = `url(${croppedImage.src})`;
         tile.getElementsByTagName('img').src = ''
+        tile.classList.add("M"+document.getElementById("drop").value+"["+croppedImage.classList[0]+"],");
       });
     }
   }
+
+
+  function exportMap() {
+  const tiles = document.querySelectorAll('.tile');
+  let map = '';
+  tiles.forEach(tile => {
+    map = map + ' ' + tile.classList[1];
+  });
+
+  const blob = new Blob([map], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'untitled.map';
+  a.click();
+}
+
   
 
     </script>
+
       </div>
     </div>
   </body>
