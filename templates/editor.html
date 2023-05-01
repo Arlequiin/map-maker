@@ -175,8 +175,10 @@ function importMap() {
         } else if(fileContent[i][1]!==undefined) {
           console.log(fileContent[i][1])
           fileContent[i][1]=fileContent[i][1].split(".png")
+          fileContent[i][1][0]=fileContent[i][1][0].slice(1)
         }
         fileContent[i][0]=fileContent[i][0].split(".png")
+        fileContent[i][0][0]=fileContent[i][0][0].slice(1)
        console.log(fileContent[i])
       }
       const tiles = document.querySelectorAll('.tile');
