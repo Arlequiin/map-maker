@@ -60,6 +60,7 @@ Live coordinate : <a id="coordinate"></a>
         for(let j = 0; j < 40; j++) {
           const tile = document.createElement("div");
           tile.setAttribute("id", `${alphabet[i]}${j}`);
+          tile.setAttribute("title", `${alphabet[i]}${j}`);
           tile.setAttribute("onmouseout", `setDrawMode('${alphabet[i]}${j}')`);
           tile.setAttribute("onclick", `setSelected('${alphabet[i]}${j}')`);
           tile.classList.add("tile");
@@ -173,17 +174,38 @@ function importMap() {
         if (fileContent[i][1]==''){
           fileContent[i].pop()
         } else if(fileContent[i][1]!==undefined) {
-          console.log(fileContent[i][1])
           fileContent[i][1]=fileContent[i][1].split(".png")
           fileContent[i][1][0]=fileContent[i][1][0].slice(1)
         }
         fileContent[i][0]=fileContent[i][0].split(".png")
         fileContent[i][0][0]=fileContent[i][0][0].slice(1)
-       console.log(fileContent[i])
       }
+      let count = 0;
       const tiles = document.querySelectorAll('.tile');
       tiles.forEach(tile => {
-        // plus tard
+        count++
+        //console.log(fileContent.length)
+        //console.log(fileContent[count][0][0])
+        // upper tile
+        if (fileContent[count].length==2){
+        //console.log(fileContent[count][1])
+        fetch(`/selection_box/${fileContent[count][1][0]}/${fileContent[count][1][1]}`)
+        .then(response => response.json())
+        .then(data => {
+            //console.log(data);
+            tile.getElementsByTagName('img')[0].src=`data:image/jpeg;base64,${data.image_data}`;
+        })
+        .catch(error => console.error(error));
+      }
+        // middle tile
+        fetch(`/selection_box/${fileContent[count][0][0]}/${fileContent[count][0][1]}`)
+        .then(response => response.json())
+        .then(data => {
+            //console.log(data.image_data);
+            tile.style.backgroundImage=`url(data:image/jpeg;base64,${data.image_data})`
+        })
+        //.catch(error => console.error(error));
+        console.log(tile.id)
       });
     };
     reader.readAsText(file);

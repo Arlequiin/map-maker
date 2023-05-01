@@ -3,6 +3,8 @@ import os, random, math
 from PIL import Image
 from io import BytesIO
 import base64
+import json
+
 app = Flask(__name__)
 
 
@@ -20,6 +22,18 @@ def get_selection(x,y,option,tilesize):
     x,y = round_to(tilesize,int(x)), round_to(tilesize,int(y))
     img = Image.open('static/data/tilesets/images/'+option)
     box = (x-tilesize, y-tilesize, x, y)
+    cropped_img = img.crop(box)
+    bytes_io = BytesIO()
+    cropped_img.save(bytes_io, format='PNG')
+    img_data = bytes_io.getvalue()
+    encoded_img_data = base64.b64encode(img_data).decode('utf-8')
+    return {'image_data': encoded_img_data, 'box': box}
+
+@app.route("/selection_box/<string:option>/<string:box>/")
+def selection_box(option,box):
+    option+=".png"
+    img = Image.open('static/data/tilesets/images/'+option)
+    box=json.loads(box)
     cropped_img = img.crop(box)
     bytes_io = BytesIO()
     cropped_img.save(bytes_io, format='PNG')
