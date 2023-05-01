@@ -35,6 +35,7 @@ function getXY(tilesize) {
             console.log(data);
             const img = document.getElementById("cropped-image");
             img.src = `data:image/jpeg;base64,${data.image_data}`;
+            img.classList = []; 
             img.classList.add(data.box)
         })
         .catch(error => console.error(error));

@@ -76,22 +76,22 @@ function setSelected(id) {
   if (document.getElementById("tile_mode").value == "middle"){
     if (croppedImage.complete) {
       selectedTile.style.backgroundImage = `url(${croppedImage.src})`;
-      selectedTile.classList.add("M"+document.getElementById("drop").value+"["+croppedImage.classList[0]+"],");
+      selectedTile.classList.add("M"+document.getElementById("drop").value+"["+croppedImage.classList[0]+"]");
   } else {
       croppedImage.onload = function() {
         selectedTile.style.backgroundImage = `url(${croppedImage.src})`;
-        selectedTile.classList.add("M"+document.getElementById("drop").value+"["+croppedImage.classList[0]+"],");
+        selectedTile.classList.add("M"+document.getElementById("drop").value+"["+croppedImage.classList[0]+"]");
       }
   } 
   } else {
     const image = selectedTile.getElementsByTagName('img')[0];
     if (croppedImage.complete) {
       image.src = croppedImage.src;
-      selectedTile.classList.add("U"+document.getElementById("drop").value+"["+croppedImage.classList[0]+"],");
+      selectedTile.classList.add("U"+document.getElementById("drop").value+"["+croppedImage.classList[0]+"]");
     } else {
       croppedImage.onload = function() {
       image.src = croppedImage.src;
-      selectedTile.classList.add("U"+document.getElementById("drop").value+"["+croppedImage.classList[0]+"],");
+      selectedTile.classList.add("U"+document.getElementById("drop").value+"["+croppedImage.classList[0]+"]");
       }
   }
 
@@ -128,13 +128,13 @@ function fill() {
       tiles.forEach(tile => {
         tile.style.backgroundImage = `url(${croppedImage.src})`;
         tile.getElementsByTagName('img').src = ''
-        tile.classList.add("M"+document.getElementById("drop").value+"["+croppedImage.classList[0]+"],");
+        tile.classList.add("M"+document.getElementById("drop").value+"["+croppedImage.classList[0]+"]");
       });
     } else {
       tiles.forEach(tile => {
         tile.style.backgroundImage = `url(${croppedImage.src})`;
         tile.getElementsByTagName('img').src = ''
-        tile.classList.add("M"+document.getElementById("drop").value+"["+croppedImage.classList[0]+"],");
+        tile.classList.add("M"+document.getElementById("drop").value+"["+croppedImage.classList[0]+"]");
       });
     }
   }
@@ -166,11 +166,18 @@ function importMap() {
       let fileContent = event.target.result;
       fileContent = fileContent.toString();
       fileContent = fileContent.split("tile");
-      for(let i = 1; i<fileContent.length; i++){
-        fileContent[i]=fileContent[i].replace("],","|")
+      for(let i = 0; i<fileContent.length; i++){
+        fileContent[i]=fileContent[i].replace("]","|").replaceAll(" ","")
         fileContent[i]=fileContent[i].split("|")
         fileContent[i][0]=fileContent[i][0]+']'
-        console.log(fileContent[i])
+        if (fileContent[i][1]==''){
+          fileContent[i].pop()
+        } else if(fileContent[i][1]!==undefined) {
+          console.log(fileContent[i][1])
+          fileContent[i][1]=fileContent[i][1].split(".png")
+        }
+        fileContent[i][0]=fileContent[i][0].split(".png")
+       console.log(fileContent[i])
       }
       const tiles = document.querySelectorAll('.tile');
       tiles.forEach(tile => {
