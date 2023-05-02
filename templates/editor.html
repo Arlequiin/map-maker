@@ -168,12 +168,11 @@ async function importMap() {
       for (let i = 1; i < fileContent.length; i++) {
         fileContent[i]=fileContent[i].replaceAll(" ","").replace('M','').split('U')
         fileContent[i][0]=fileContent[i][0].split('.png')
-        fileContent[i][0][1]=JSON.parse(fileContent[i][0][1])
+        fileContent[i][0][1]=JSON.parse(fileContent[i][0][1].split("M")[0])
         if (fileContent[i].length==2){
         fileContent[i][1]=fileContent[i][1].split('.png')
-        fileContent[i][1][1]=JSON.parse(fileContent[i][1][1])
+        fileContent[i][1][1]=JSON.parse(fileContent[i][1][1].split("M")[0])
         }
-        console.log(fileContent[i])
       }
       let count = 0;
       const tiles = document.querySelectorAll('.tile');
@@ -181,13 +180,14 @@ async function importMap() {
         count++
         // middle tile
         let bg_style = `background-image:url(static/data/tilesets/images/${fileContent[count][0][0]}.png);width: 16px; height: 16px; background-position: -${fileContent[count][0][1][0]}px -${fileContent[count][0][1][1]}px;`
-  let img_style = `width: 16px; height: 16px; object-position: -${fileContent[count][1][1][0]}px -${fileContent[count][1][1][1]}px; object-fit: none;`;
 
-       
-
+       console.log(bg_style)
+      tile.style=bg_style;
        // upper tile
         if (fileContent[count].length == 2) {
-          //pass
+          let img_style = `width: 16px; height: 16px; object-position: -${fileContent[count][1][1][0]}px -${fileContent[count][1][1][1]}px; object-fit: none;`;
+          tile.getElementsByTagName('img')[0].src=`static/data/tilesets/images/${fileContent[count][1][0]}.png`;
+          tile.getElementsByTagName('img')[0].style=img_style
         };
         
       });
