@@ -74,13 +74,11 @@ Live coordinate : <a id="coordinate"></a>
 function setSelected(id) {
   const selectedTile = document.getElementById(id);
   const croppedImage = document.getElementById("cropped-image");
-  console.log(croppedImage.classList[0])
   const region = croppedImage.classList[0].split("|")
   let bg_style = `background-image:url(${croppedImage.src});width: 16px; height: 16px; background-position: -${region[0]}px -${region[1]}px;`
   let img_style = `width: 16px; height: 16px; object-position: -${region[0]}px -${region[1]}px; object-fit: none;`;
   if (document.getElementById("tile_mode").value == "middle"){
     if (croppedImage.complete) {
-      console.log(bg_style)
       selectedTile.style = bg_style
       selectedTile.classList.add("M"+document.getElementById("drop").value+"["+region+"]");
   } else {
@@ -94,18 +92,12 @@ function setSelected(id) {
     if (croppedImage.complete) {
       image.src = croppedImage.src;
       image.style=img_style;
-      selectedTile.classList.add("U"+document.getElementById("drop").value+"["+croppedImage.classList[0]+"]");
-      if (croppedImage.classList[0]==undefined){
-          //selectedTile.style.background='red'
-        }
+      selectedTile.classList.add(" U"+document.getElementById("drop").value+"["+region+"]");
     } else {
       croppedImage.onload = function() {
       image.src = croppedImage.src;
       image.style=croppedImage.classList[0];
-      selectedTile.classList.add("U"+document.getElementById("drop").value+"["+croppedImage.classList[0]+"]");
-      if (croppedImage.classList[0]==undefined){
-         //selectedTile.style.background='red'
-        }
+      selectedTile.classList.add(" U"+document.getElementById("drop").value+"["+region+"]");
       }
   }
 
@@ -138,25 +130,12 @@ function fill() {
     const is_grid = document.getElementById('grid').checked;
     const tiles = document.querySelectorAll('.tile');
     const croppedImage = document.getElementById("cropped-image");
-    if (is_grid) {
+    const region = croppedImage.classList[0].split("|")
+    let bg_style = `background-image:url(${croppedImage.src});width: 16px; height: 16px; background-position: -${region[0]}px -${region[1]}px;`
       tiles.forEach(tile => {
-        tile.style.backgroundImage = `url(${croppedImage.src})`;
-        tile.getElementsByTagName('img').src = ''
-        tile.classList.add("M"+document.getElementById("drop").value+"["+croppedImage.classList[0]+"]");
-        if (croppedImage.classList[0]==undefined){
-          //selectedTile.style.background='red'
-        }
+        tile.style=bg_style;
+        tile.classList.add("M"+document.getElementById("drop").value+"["+region+"]");
       });
-    } else {
-      tiles.forEach(tile => {
-        tile.style.backgroundImage = `url(${croppedImage.src})`;
-        tile.getElementsByTagName('img').src = ''
-        tile.classList.add("M"+document.getElementById("drop").value+"["+croppedImage.classList[0]+"]");
-        if (croppedImage.classList[0]==undefined){
-         // selectedTile.style.background='red'
-        }
-      });
-    }
   }
 
 
@@ -187,36 +166,22 @@ async function importMap() {
       fileContent = fileContent.toString();
       fileContent = fileContent.split("tile");
       for (let i = 0; i < fileContent.length; i++) {
-        fileContent[i] = fileContent[i].replace("]", "|").replaceAll(" ", "")
-        fileContent[i] = fileContent[i].split("|")
-        fileContent[i][0] = fileContent[i][0] + ']'
-        if (fileContent[i][1] == '') {
-          fileContent[i].pop()
-        } else if (fileContent[i][1] !== undefined) {
-          fileContent[i][1] = fileContent[i][1].split(".png")
-          fileContent[i][1][0] = fileContent[i][1][0].slice(1)
-        }
-        fileContent[i][0] = fileContent[i][0].split(".png")
-        fileContent[i][0][0] = fileContent[i][0][0].slice(1)
+
+        console.log(fileContent[i])
       }
       let count = 0;
       const tiles = document.querySelectorAll('.tile');
       tiles.forEach(async tile => {
         count++
         // middle tile
-        let style_rect = `width: 16px; height: 16px; object-position: -${fileContent[count][0][1][0]}px -${fileContent[count][0][1][1]}px; object-fit: none;`;
-        tile.style.backgroundImage = `url(static/data/tilesets/images/${fileContent[count][0][0]}.png)`
+        let bg_style = `background-image:url(static/data/tilesets/images/${fileContent[count][0][0]}.png);width: 16px; height: 16px; background-position: -${fileContent[count][0][1][0]}px -${fileContent[count][0][1][1]}px;`
+  let img_style = `width: 16px; height: 16px; object-position: -${fileContent[count][1][1][0]}px -${fileContent[count][1][1][1]}px; object-fit: none;`;
+
        
 
        // upper tile
         if (fileContent[count].length == 2) {
-          tile.getElementsByTagName('img')[0].src = `static/data/tilesets/images/${fileContent[count][1][0]}.png`;
-          fileContent[count][1][1]=fileContent[count][1][1].split("U")[0]
-          fileContent[count][1][1]=JSON.parse(fileContent[count][1][1])
-          let style_rect = `width: 16px; height: 16px; object-position: -${fileContent[count][1][1][0]}px -${fileContent[count][1][1][1]}px; object-fit: none;`;
-          tile.getElementsByTagName('img')[0].style = style_rect;
-          console.log(fileContent[count][1][1])
-          console.log(style_rect)
+          //pass
         };
         
       });
@@ -232,6 +197,7 @@ function Clear(){
     tile.style.backgroundImage = '';
     tile.style='';
     tile.getElementsByTagName('img')[0].src='';
+    tile.getElementsByTagName('img')[0].style='';
   });
 }
 
