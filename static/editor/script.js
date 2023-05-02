@@ -28,15 +28,16 @@ function getXY(tilesize) {
     function handleMouseMove(event) {
         const x = event.offsetX;
         const y = event.offsetY;
-        console.log([x,y])
         fetch(`/selection/${x}/${y}/${dropdown}/${tilesize}`)
         .then(response => response.json())
         .then(data => {
-            console.log(data);
+            let style_rect = `width: 16px; height: 16px; object-position: -${data.box[0]}px -${data.box[1]}px; object-fit: none;`;
             const img = document.getElementById("cropped-image");
-            img.src = `data:image/jpeg;base64,${data.image_data}`;
+            img.src = `static/data/tilesets/images/${dropdown}`;
+            img.style=style_rect;
             img.classList = []; 
-            img.classList.add(data.box)
+            img.classList.add(`${data.box[0]}|${data.box[1]}`)
+            //img.classList.add(`width: 16px; height: 16px; background-position: -${data.box[0]}px -${data.box[1]}px; background-image:url(${img.src})`)
         })
         .catch(error => console.error(error));
         image.removeEventListener("mousemove", handleMouseMove);

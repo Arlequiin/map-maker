@@ -74,36 +74,37 @@ Live coordinate : <a id="coordinate"></a>
 function setSelected(id) {
   const selectedTile = document.getElementById(id);
   const croppedImage = document.getElementById("cropped-image");
+  console.log(croppedImage.classList[0])
+  const region = croppedImage.classList[0].split("|")
+  let bg_style = `background-image:url(${croppedImage.src});width: 16px; height: 16px; background-position: -${region[0]}px -${region[1]}px;`
+  let img_style = `width: 16px; height: 16px; object-position: -${region[0]}px -${region[1]}px; object-fit: none;`;
   if (document.getElementById("tile_mode").value == "middle"){
     if (croppedImage.complete) {
-      selectedTile.style.backgroundImage = `url(${croppedImage.src})`;
-      selectedTile.classList.add("M"+document.getElementById("drop").value+"["+croppedImage.classList[0]+"]");
-      if (croppedImage.classList[0]==undefined){
-          tile.style.background='red'
-        }
+      console.log(bg_style)
+      selectedTile.style = bg_style
+      selectedTile.classList.add("M"+document.getElementById("drop").value+"["+region+"]");
   } else {
       croppedImage.onload = function() {
-        selectedTile.style.backgroundImage = `url(${croppedImage.src})`;
+        selectedTile.style = bg_style
         selectedTile.classList.add("M"+document.getElementById("drop").value+"["+croppedImage.classList[0]+"]");
-        if (croppedImage.classList[0]==undefined){
-          tile.style.background='red'
-        }
       }
   } 
   } else {
     const image = selectedTile.getElementsByTagName('img')[0];
     if (croppedImage.complete) {
       image.src = croppedImage.src;
+      image.style=img_style;
       selectedTile.classList.add("U"+document.getElementById("drop").value+"["+croppedImage.classList[0]+"]");
       if (croppedImage.classList[0]==undefined){
-          tile.style.background='red'
+          //selectedTile.style.background='red'
         }
     } else {
       croppedImage.onload = function() {
       image.src = croppedImage.src;
+      image.style=croppedImage.classList[0];
       selectedTile.classList.add("U"+document.getElementById("drop").value+"["+croppedImage.classList[0]+"]");
       if (croppedImage.classList[0]==undefined){
-          tile.style.background='red'
+         //selectedTile.style.background='red'
         }
       }
   }
@@ -143,7 +144,7 @@ function fill() {
         tile.getElementsByTagName('img').src = ''
         tile.classList.add("M"+document.getElementById("drop").value+"["+croppedImage.classList[0]+"]");
         if (croppedImage.classList[0]==undefined){
-          tile.style.background='red'
+          //selectedTile.style.background='red'
         }
       });
     } else {
@@ -152,7 +153,7 @@ function fill() {
         tile.getElementsByTagName('img').src = ''
         tile.classList.add("M"+document.getElementById("drop").value+"["+croppedImage.classList[0]+"]");
         if (croppedImage.classList[0]==undefined){
-          tile.style.background='red'
+         // selectedTile.style.background='red'
         }
       });
     }
@@ -164,7 +165,6 @@ function fill() {
   let map = '';
   tiles.forEach(tile => {
     map = map + ' ' + tile.classList;
-    console.log(tile.classList)
   });
 
   const blob = new Blob([map], { type: 'text/plain' });
@@ -203,21 +203,22 @@ async function importMap() {
       const tiles = document.querySelectorAll('.tile');
       tiles.forEach(async tile => {
         count++
-        //console.log(fileContent.length)
-        //console.log(fileContent[count][0][0])
-        // upper tile
-        if (fileContent[count].length == 2) {
-          //console.log(fileContent[count][1])
-          const response = await fetch(`/selection_box/${fileContent[count][1][0]}/${fileContent[count][1][1]}`)
-          const data = await response.json();
-          //console.log(data);
-          tile.getElementsByTagName('img')[0].src = `data:image/jpeg;base64,${data.image_data}`;
-        }
         // middle tile
-        const response = await fetch(`/selection_box/${fileContent[count][0][0]}/${fileContent[count][0][1]}`)
-        const data = await response.json();
-        //console.log(data.image_data);
-        tile.style.backgroundImage = `url(data:image/jpeg;base64,${data.image_data})`
+        let style_rect = `width: 16px; height: 16px; object-position: -${fileContent[count][0][1][0]}px -${fileContent[count][0][1][1]}px; object-fit: none;`;
+        tile.style.backgroundImage = `url(static/data/tilesets/images/${fileContent[count][0][0]}.png)`
+       
+
+       // upper tile
+        if (fileContent[count].length == 2) {
+          tile.getElementsByTagName('img')[0].src = `static/data/tilesets/images/${fileContent[count][1][0]}.png`;
+          fileContent[count][1][1]=fileContent[count][1][1].split("U")[0]
+          fileContent[count][1][1]=JSON.parse(fileContent[count][1][1])
+          let style_rect = `width: 16px; height: 16px; object-position: -${fileContent[count][1][1][0]}px -${fileContent[count][1][1][1]}px; object-fit: none;`;
+          tile.getElementsByTagName('img')[0].style = style_rect;
+          console.log(fileContent[count][1][1])
+          console.log(style_rect)
+        };
+        
       });
     };
     reader.readAsText(file);
@@ -229,6 +230,7 @@ function Clear(){
   const tiles = document.querySelectorAll('.tile');
   tiles.forEach(tile => {
     tile.style.backgroundImage = '';
+    tile.style='';
     tile.getElementsByTagName('img')[0].src='';
   });
 }

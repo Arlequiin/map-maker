@@ -20,14 +20,8 @@ async def index():
 async def get_selection(x,y,option,tilesize):
     tilesize=int(tilesize)
     x,y = round_to(tilesize,int(x)), round_to(tilesize,int(y))
-    img = Image.open('static/data/tilesets/images/'+option)
     box = (x-tilesize, y-tilesize, x, y)
-    cropped_img = img.crop(box)
-    bytes_io = BytesIO()
-    cropped_img.save(bytes_io, format='PNG')
-    img_data = bytes_io.getvalue()
-    encoded_img_data = base64.b64encode(img_data).decode('utf-8')
-    return {'image_data': encoded_img_data, 'box': box}
+    return {'box': box}
 
 @app.route("/selection_box/<string:option>/<string:box>/")
 async def selection_box(option,box):
@@ -43,6 +37,6 @@ async def selection_box(option,box):
     cropped_img.save(bytes_io, format='PNG')
     img_data = bytes_io.getvalue()
     encoded_img_data = base64.b64encode(img_data).decode('utf-8')
-    return {'image_data': encoded_img_data, 'box': box}
+    return {'box': box}
 
 app.run(debug=True,host='0.0.0.0',port=random.randint(1000,9999))
