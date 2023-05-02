@@ -92,12 +92,12 @@ function setSelected(id) {
     if (croppedImage.complete) {
       image.src = croppedImage.src;
       image.style=img_style;
-      selectedTile.classList.add(" U"+document.getElementById("drop").value+"["+region+"]");
+      selectedTile.classList.add("U"+document.getElementById("drop").value+"["+region+"]");
     } else {
       croppedImage.onload = function() {
       image.src = croppedImage.src;
       image.style=croppedImage.classList[0];
-      selectedTile.classList.add(" U"+document.getElementById("drop").value+"["+region+"]");
+      selectedTile.classList.add("U"+document.getElementById("drop").value+"["+region+"]");
       }
   }
 
@@ -143,7 +143,7 @@ function fill() {
   const tiles = document.querySelectorAll('.tile');
   let map = '';
   tiles.forEach(tile => {
-    map = map + ' ' + tile.classList;
+    map = map + tile.classList;
   });
 
   const blob = new Blob([map], { type: 'text/plain' });
@@ -165,8 +165,14 @@ async function importMap() {
       let fileContent = event.target.result;
       fileContent = fileContent.toString();
       fileContent = fileContent.split("tile");
-      for (let i = 0; i < fileContent.length; i++) {
-
+      for (let i = 1; i < fileContent.length; i++) {
+        fileContent[i]=fileContent[i].replaceAll(" ","").replace('M','').split('U')
+        fileContent[i][0]=fileContent[i][0].split('.png')
+        fileContent[i][0][1]=JSON.parse(fileContent[i][0][1])
+        if (fileContent[i].length==2){
+        fileContent[i][1]=fileContent[i][1].split('.png')
+        fileContent[i][1][1]=JSON.parse(fileContent[i][1][1])
+        }
         console.log(fileContent[i])
       }
       let count = 0;
