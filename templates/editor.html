@@ -175,62 +175,55 @@ function fill() {
   a.click();
 }
 
-function importMap() {
+async function importMap() {
   Clear();
   let fileInput = document.createElement('input');
   fileInput.type = 'file';
-  fileInput.onchange = function(event) {
+  fileInput.onchange = async function(event) {
     let file = event.target.files[0];
     let reader = new FileReader();
-    reader.onload = function(event) {
+    reader.onload = async function(event) {
       let fileContent = event.target.result;
       fileContent = fileContent.toString();
       fileContent = fileContent.split("tile");
-      for(let i = 0; i<fileContent.length; i++){
-        fileContent[i]=fileContent[i].replace("]","|").replaceAll(" ","")
-        fileContent[i]=fileContent[i].split("|")
-        fileContent[i][0]=fileContent[i][0]+']'
-        if (fileContent[i][1]==''){
+      for (let i = 0; i < fileContent.length; i++) {
+        fileContent[i] = fileContent[i].replace("]", "|").replaceAll(" ", "")
+        fileContent[i] = fileContent[i].split("|")
+        fileContent[i][0] = fileContent[i][0] + ']'
+        if (fileContent[i][1] == '') {
           fileContent[i].pop()
-        } else if(fileContent[i][1]!==undefined) {
-          fileContent[i][1]=fileContent[i][1].split(".png")
-          fileContent[i][1][0]=fileContent[i][1][0].slice(1)
+        } else if (fileContent[i][1] !== undefined) {
+          fileContent[i][1] = fileContent[i][1].split(".png")
+          fileContent[i][1][0] = fileContent[i][1][0].slice(1)
         }
-        fileContent[i][0]=fileContent[i][0].split(".png")
-        fileContent[i][0][0]=fileContent[i][0][0].slice(1)
+        fileContent[i][0] = fileContent[i][0].split(".png")
+        fileContent[i][0][0] = fileContent[i][0][0].slice(1)
       }
       let count = 0;
       const tiles = document.querySelectorAll('.tile');
-      tiles.forEach(tile => {
+      tiles.forEach(async tile => {
         count++
         //console.log(fileContent.length)
         //console.log(fileContent[count][0][0])
         // upper tile
-        if (fileContent[count].length==2){
-        //console.log(fileContent[count][1])
-        fetch(`/selection_box/${fileContent[count][1][0]}/${fileContent[count][1][1]}`)
-        .then(response => response.json())
-        .then(data => {
-            //console.log(data);
-            tile.getElementsByTagName('img')[0].src=`data:image/jpeg;base64,${data.image_data}`;
-        })
-        .catch(error => console.error(error));
-      }
+        if (fileContent[count].length == 2) {
+          //console.log(fileContent[count][1])
+          const response = await fetch(`/selection_box/${fileContent[count][1][0]}/${fileContent[count][1][1]}`)
+          const data = await response.json();
+          //console.log(data);
+          tile.getElementsByTagName('img')[0].src = `data:image/jpeg;base64,${data.image_data}`;
+        }
         // middle tile
-        fetch(`/selection_box/${fileContent[count][0][0]}/${fileContent[count][0][1]}`)
-        .then(response => response.json())
-        .then(data => {
-            //console.log(data.image_data);
-            tile.style.backgroundImage=`url(data:image/jpeg;base64,${data.image_data})`
-        })
-        .catch(error => (error));
+        const response = await fetch(`/selection_box/${fileContent[count][0][0]}/${fileContent[count][0][1]}`)
+        const data = await response.json();
+        //console.log(data.image_data);
+        tile.style.backgroundImage = `url(data:image/jpeg;base64,${data.image_data})`
       });
     };
     reader.readAsText(file);
   };
   fileInput.click();
 }
-
 
 function Clear(){
   const tiles = document.querySelectorAll('.tile');

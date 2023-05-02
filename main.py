@@ -12,12 +12,12 @@ def round_to(rounded,num):
     return int(rounded * math.ceil(float(num) / rounded))
 
 @app.route("/")
-def index():
+async def index():
     tilesets = sorted(os.listdir('static/data/tilesets/images/'))
     return render_template("editor.html",tilesets=tilesets)
 
 @app.route("/selection/<string:x>/<string:y>/<string:option>/<string:tilesize>/")
-def get_selection(x,y,option,tilesize):
+async def get_selection(x,y,option,tilesize):
     tilesize=int(tilesize)
     x,y = round_to(tilesize,int(x)), round_to(tilesize,int(y))
     img = Image.open('static/data/tilesets/images/'+option)
@@ -30,7 +30,7 @@ def get_selection(x,y,option,tilesize):
     return {'image_data': encoded_img_data, 'box': box}
 
 @app.route("/selection_box/<string:option>/<string:box>/")
-def selection_box(option,box):
+async def selection_box(option,box):
     box=box.split("U")[0]
     box=box.split("M")[0]
     print(box)
