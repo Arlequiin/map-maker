@@ -78,10 +78,16 @@ function setSelected(id) {
     if (croppedImage.complete) {
       selectedTile.style.backgroundImage = `url(${croppedImage.src})`;
       selectedTile.classList.add("M"+document.getElementById("drop").value+"["+croppedImage.classList[0]+"]");
+      if (croppedImage.classList[0]==undefined){
+          tile.style.background='red'
+        }
   } else {
       croppedImage.onload = function() {
         selectedTile.style.backgroundImage = `url(${croppedImage.src})`;
         selectedTile.classList.add("M"+document.getElementById("drop").value+"["+croppedImage.classList[0]+"]");
+        if (croppedImage.classList[0]==undefined){
+          tile.style.background='red'
+        }
       }
   } 
   } else {
@@ -89,10 +95,16 @@ function setSelected(id) {
     if (croppedImage.complete) {
       image.src = croppedImage.src;
       selectedTile.classList.add("U"+document.getElementById("drop").value+"["+croppedImage.classList[0]+"]");
+      if (croppedImage.classList[0]==undefined){
+          tile.style.background='red'
+        }
     } else {
       croppedImage.onload = function() {
       image.src = croppedImage.src;
       selectedTile.classList.add("U"+document.getElementById("drop").value+"["+croppedImage.classList[0]+"]");
+      if (croppedImage.classList[0]==undefined){
+          tile.style.background='red'
+        }
       }
   }
 
@@ -130,12 +142,18 @@ function fill() {
         tile.style.backgroundImage = `url(${croppedImage.src})`;
         tile.getElementsByTagName('img').src = ''
         tile.classList.add("M"+document.getElementById("drop").value+"["+croppedImage.classList[0]+"]");
+        if (croppedImage.classList[0]==undefined){
+          tile.style.background='red'
+        }
       });
     } else {
       tiles.forEach(tile => {
         tile.style.backgroundImage = `url(${croppedImage.src})`;
         tile.getElementsByTagName('img').src = ''
         tile.classList.add("M"+document.getElementById("drop").value+"["+croppedImage.classList[0]+"]");
+        if (croppedImage.classList[0]==undefined){
+          tile.style.background='red'
+        }
       });
     }
   }
@@ -146,6 +164,7 @@ function fill() {
   let map = '';
   tiles.forEach(tile => {
     map = map + ' ' + tile.classList;
+    console.log(tile.classList)
   });
 
   const blob = new Blob([map], { type: 'text/plain' });
@@ -204,14 +223,14 @@ function importMap() {
             //console.log(data.image_data);
             tile.style.backgroundImage=`url(data:image/jpeg;base64,${data.image_data})`
         })
-        //.catch(error => console.error(error));
-        console.log(tile.id)
+        .catch(error => (error));
       });
     };
     reader.readAsText(file);
   };
   fileInput.click();
 }
+
 
 function Clear(){
   const tiles = document.querySelectorAll('.tile');

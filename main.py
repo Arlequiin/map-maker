@@ -31,8 +31,12 @@ def get_selection(x,y,option,tilesize):
 
 @app.route("/selection_box/<string:option>/<string:box>/")
 def selection_box(option,box):
+    box=box.split("U")[0]
+    box=box.split("M")[0]
+    print(box)
     option+=".png"
     img = Image.open('static/data/tilesets/images/'+option)
+    print(box)
     box=json.loads(box)
     cropped_img = img.crop(box)
     bytes_io = BytesIO()
