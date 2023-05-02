@@ -90,14 +90,39 @@ function setSelected(id) {
   } else {
     const image = selectedTile.getElementsByTagName('img')[0];
     if (croppedImage.complete) {
-      image.src = croppedImage.src;
+      if (selectedTile.classList.length==2){
+        image.src = croppedImage.src;
       image.style=img_style;
       selectedTile.classList.add("U"+document.getElementById("drop").value+"["+region+"]");
+      image.src = croppedImage.src;
+      image.style=img_style;
+      } else if (selectedTile.classList.length==1){
+        alert("You can't put an upper tile without a middle tile, please fill the blank.")
+      } else if (selectedTile.classList.length==3){
+        console.log(selectedTile.classList)
+        selectedTile.classList[2]="U"+document.getElementById("drop").value+"["+region+"]"
+        console.log(selectedTile.classList)
+
+
+      }
     } else {
       croppedImage.onload = function() {
-      image.src = croppedImage.src;
-      image.style=croppedImage.classList[0];
+      if (selectedTile.classList.length==2){
+        image.src = croppedImage.src;
+      image.style=img_style;
       selectedTile.classList.add("U"+document.getElementById("drop").value+"["+region+"]");
+      image.src = croppedImage.src;
+      image.style=img_style;
+      } else if (selectedTile.classList.length==1){
+        alert("You can't put an upper tile without a middle tile, please fill the blank.")
+      } else if (selectedTile.classList.length==3){
+        console.log(selectedTile.classList)
+        selectedTile.classList[2]="U"+document.getElementById("drop").value+"["+region+"]"
+        image.src = croppedImage.src;
+        image.style=img_style;
+        console.log(selectedTile.classList)
+        
+      }
       }
   }
 
@@ -171,7 +196,7 @@ async function importMap() {
         fileContent[i][0][1]=JSON.parse(fileContent[i][0][1].split("M")[0])
         if (fileContent[i].length==2){
         fileContent[i][1]=fileContent[i][1].split('.png')
-        fileContent[i][1][1]=JSON.parse(fileContent[i][1][1].split("M")[0])
+        fileContent[i][1][1]=JSON.parse(fileContent[i][1][1].split("M"))
         }
       }
       let count = 0;
