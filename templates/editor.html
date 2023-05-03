@@ -79,12 +79,20 @@ function setSelected(id) {
   let img_style = `width: 16px; height: 16px; object-position: -${region[0]}px -${region[1]}px; object-fit: none;`;
   if (document.getElementById("tile_mode").value == "middle"){
     if (croppedImage.complete) {
-      selectedTile.style = bg_style
-      selectedTile.classList.add("M"+document.getElementById("drop").value+"["+region+"]");
+      if (selectedTile.classList.length==1){
+        selectedTile.classList.add("M"+document.getElementById("drop").value+"["+croppedImage.classList[0]+"]");
+        } else {
+          selectedTile.style = bg_style
+          selectedTile.classList.replace(selectedTile.classList[1],"M"+document.getElementById("drop").value+"["+region+"]")
+        }
   } else {
       croppedImage.onload = function() {
-        selectedTile.style = bg_style
+        if (selectedTile.classList.length==1){
         selectedTile.classList.add("M"+document.getElementById("drop").value+"["+croppedImage.classList[0]+"]");
+        } else {
+          selectedTile.style = bg_style
+          selectedTile.classList.replace(selectedTile.classList[1],"M"+document.getElementById("drop").value+"["+region+"]")
+        }
       }
   } 
   } else {
@@ -99,15 +107,17 @@ function setSelected(id) {
       } else if (selectedTile.classList.length==1){
         alert("You can't put an upper tile without a middle tile, please fill the blank.")
       } else if (selectedTile.classList.length==3){
-        console.log(selectedTile.classList)
-        selectedTile.classList[2]="U"+document.getElementById("drop").value+"["+region+"]"
+        image.src = croppedImage.src;
+        image.style=img_style;
+        console.log("U"+document.getElementById("drop").value+"["+region+"]")
+        selectedTile.classList.replace(selectedTile.classList[2],"U"+document.getElementById("drop").value+"["+region+"]")
         console.log(selectedTile.classList)
 
 
       }
     } else {
       croppedImage.onload = function() {
-      if (selectedTile.classList.length==2){
+        if (selectedTile.classList.length==2){
         image.src = croppedImage.src;
       image.style=img_style;
       selectedTile.classList.add("U"+document.getElementById("drop").value+"["+region+"]");
@@ -116,12 +126,12 @@ function setSelected(id) {
       } else if (selectedTile.classList.length==1){
         alert("You can't put an upper tile without a middle tile, please fill the blank.")
       } else if (selectedTile.classList.length==3){
-        console.log(selectedTile.classList)
-        selectedTile.classList[2]="U"+document.getElementById("drop").value+"["+region+"]"
         image.src = croppedImage.src;
         image.style=img_style;
-        console.log(selectedTile.classList)
-        
+        console.log("U"+document.getElementById("drop").value+"["+region+"]")
+        selectedTile.classList.replace(selectedTile.classList[2],"U"+document.getElementById("drop").value+"["+region+"]")
+
+
       }
       }
   }
@@ -158,8 +168,12 @@ function fill() {
     const region = croppedImage.classList[0].split("|")
     let bg_style = `background-image:url(${croppedImage.src});width: 16px; height: 16px; background-position: -${region[0]}px -${region[1]}px;`
       tiles.forEach(tile => {
-        tile.style=bg_style;
-        tile.classList.add("M"+document.getElementById("drop").value+"["+region+"]");
+        if (tile.classList.length==1){
+        tile.classList.add("M"+document.getElementById("drop").value+"["+croppedImage.classList[0]+"]");
+        } else {
+          tile.style = bg_style
+          tile.classList.replace(tile.classList[1],"M"+document.getElementById("drop").value+"["+region+"]")
+        }
       });
   }
 
