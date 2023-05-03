@@ -45,6 +45,7 @@ Live coordinate : <a id="coordinate"></a>
 <label for="draw">Draw mode (Shortcut : P)</label>
 <button onclick="fill()">Fill</button> Mode : <select id="tile_mode"><option value="middle">Middle tile</option><option value="upper">Upper tile</option></select>
 <button onclick="Clear()">Clear</button>
+<input width="30px" size=5 value="50" id="width">x<input size="5" value="40" id="length"><button onclick="resizeEditor()">Change</button>
 <button id="importButton">Import</button>
 <button onclick="exportMap()">Export</button>
 </div>
@@ -54,10 +55,11 @@ Live coordinate : <a id="coordinate"></a>
         <div id="container-canva" style="position:absolute"></div>
     
     <script>
-      let alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+      function setGrid(width,length){
+      let alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzαβψδεφγηιξκλμνοπ;ρστθωςχυζΑΒΨΔΕΦΓΗΙΞΚΛΜΝΟΠ;ΡΣΤΘΩΣΧΥΖ";
       const container = document.getElementById("container-canva");
-      for(let i = 0; i < 50; i++) {
-        for(let j = 0; j < 40; j++) {
+      for(let i = 0; i < width; i++) {
+        for(let j = 0; j < length; j++) {
           const tile = document.createElement("div");
           tile.setAttribute("id", `${alphabet[i]}${j}`);
           tile.setAttribute("title", `${alphabet[i]}${j}`);
@@ -69,7 +71,18 @@ Live coordinate : <a id="coordinate"></a>
           tile.appendChild(image)
         }
       }
+    }
+      setGrid(40,50)
 
+function resizeEditor(){
+  l=parseInt(document.getElementById("length").value);
+  w=parseInt(document.getElementById("width").value);
+  console.log(w*16,l*16)
+  document.getElementById("container-canva").innerHTML=''
+  document.getElementById("container-canva").style.height=`${w*16}px`
+  document.getElementById("container-canva").style.width=`${l*16}px`
+  setGrid(w,l)
+}
 
 function setSelected(id) {
   const selectedTile = document.getElementById(id);
@@ -80,7 +93,8 @@ function setSelected(id) {
   if (document.getElementById("tile_mode").value == "middle"){
     if (croppedImage.complete) {
       if (selectedTile.classList.length==1){
-        selectedTile.classList.add("M"+document.getElementById("drop").value+"["+croppedImage.classList[0]+"]");
+        selectedTile.style = bg_style
+        selectedTile.classList.add("M"+document.getElementById("drop").value+"["+region+"]");
         } else {
           selectedTile.style = bg_style
           selectedTile.classList.replace(selectedTile.classList[1],"M"+document.getElementById("drop").value+"["+region+"]")
@@ -88,7 +102,8 @@ function setSelected(id) {
   } else {
       croppedImage.onload = function() {
         if (selectedTile.classList.length==1){
-        selectedTile.classList.add("M"+document.getElementById("drop").value+"["+croppedImage.classList[0]+"]");
+          selectedTile.style = bg_style
+        selectedTile.classList.add("M"+document.getElementById("drop").value+"["+region+"]");
         } else {
           selectedTile.style = bg_style
           selectedTile.classList.replace(selectedTile.classList[1],"M"+document.getElementById("drop").value+"["+region+"]")
@@ -169,7 +184,8 @@ function fill() {
     let bg_style = `background-image:url(${croppedImage.src});width: 16px; height: 16px; background-position: -${region[0]}px -${region[1]}px;`
       tiles.forEach(tile => {
         if (tile.classList.length==1){
-        tile.classList.add("M"+document.getElementById("drop").value+"["+croppedImage.classList[0]+"]");
+          tile.style = bg_style
+        tile.classList.add("M"+document.getElementById("drop").value+"["+region+"]");
         } else {
           tile.style = bg_style
           tile.classList.replace(tile.classList[1],"M"+document.getElementById("drop").value+"["+region+"]")
