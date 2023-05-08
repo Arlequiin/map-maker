@@ -96,7 +96,5 @@
         width: 16px;
         height: 16px;
         border: 1px solid #0000ff;
-        display: grid;
-        grid-template-rows: repeat(40, 16px);
-        grid-template-columns: repeat(80, 16px);
+        background-color:white;
       }

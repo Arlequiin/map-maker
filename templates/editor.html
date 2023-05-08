@@ -15,8 +15,9 @@
             {% endfor %}
           </select>
         <br>
+  Double click to select multiple tiles
 <div style="height:600px;overflow:scroll;">
-        <img src="/static/data/tilesets/images/{{tilesets[0]}}" id="tileset" onclick="getXY(16)" ondblclick="getXY(parseInt(prompt('How many tiles do you wish to select?'))*16)">
+        <img src="/static/data/tilesets/images/{{tilesets[0]}}" id="tileset" onclick="getXY(16)" ondblclick="getTileprompt()">
 </div>
 
 <br>
@@ -58,8 +59,8 @@ Live coordinate : <a id="coordinate"></a>
       function setGrid(width,length){
       let alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzαβψδεφγηιξκλμνοπ;ρστθωςχυζΑΒΨΔΕΦΓΗΙΞΚΛΜΝΟΠ;ΡΣΤΘΩΣΧΥΖ";
       const container = document.getElementById("container-canva");
-      for(let i = 0; i < width; i++) {
-        for(let j = 0; j < length; j++) {
+      for(let i = 0; i < length; i++) {
+        for(let j = 0; j < width; j++) {
           const tile = document.createElement("div");
           tile.setAttribute("id", `${alphabet[i]}${j}`);
           tile.setAttribute("title", `${alphabet[i]}${j}`);
@@ -71,16 +72,21 @@ Live coordinate : <a id="coordinate"></a>
           tile.appendChild(image)
         }
       }
+      container.style.gridTemplateRows=`repeat(${length},16px)`;
+      container.style.gridTemplateColumns=`repeat(${width},16px)`;
     }
-      setGrid(40,50)
+      setGrid(50,40)
 
+    
 function resizeEditor(){
+  const container = document.getElementById("container-canva")
   l=parseInt(document.getElementById("length").value);
   w=parseInt(document.getElementById("width").value);
   console.log(w*16,l*16)
-  document.getElementById("container-canva").innerHTML=''
-  document.getElementById("container-canva").style.height=`${w*16}px`
-  document.getElementById("container-canva").style.width=`${l*16}px`
+  container.innerHTML=''
+  container.style.height=`${l*16}px`
+  container.style.width=`${w*16}px`
+  console.log(container.style.gridTemplateRows)
   setGrid(w,l)
 }
 
