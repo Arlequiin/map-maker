@@ -79,10 +79,13 @@ Live coordinate : <a id="coordinate"></a>
 
     
 function resizeEditor(){
-  const container = document.getElementById("container-canva")
   l=parseInt(document.getElementById("length").value);
   w=parseInt(document.getElementById("width").value);
-  console.log(w*16,l*16)
+  resizeEditorNoLW(w,l)
+}
+
+function resizeEditorNoLW(w,l){
+  const container = document.getElementById("container-canva")
   container.innerHTML=''
   container.style.height=`${l*16}px`
   container.style.width=`${w*16}px`
@@ -201,8 +204,10 @@ function fill() {
 
 
   function exportMap() {
+  l=parseInt(document.getElementById("length").value);
+  w=parseInt(document.getElementById("width").value);
+  let map = `${l},${w}`
   const tiles = document.querySelectorAll('.tile');
-  let map = '';
   tiles.forEach(tile => {
     map = map + tile.classList;
   });
@@ -226,6 +231,8 @@ async function importMap() {
       let fileContent = event.target.result;
       fileContent = fileContent.toString();
       fileContent = fileContent.split("tile");
+      let dimensions = fileContent[0].split(",");
+      resizeEditorNoLW(parseInt(dimensions[1]),parseInt(dimensions[0]))
       for (let i = 1; i < fileContent.length; i++) {
         fileContent[i]=fileContent[i].replaceAll(" ","").replace('M','').split('U')
         fileContent[i][0]=fileContent[i][0].split('.png')
