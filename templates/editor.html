@@ -15,13 +15,21 @@
             {% endfor %}
           </select>
         <br>
-  Double click to select multiple tiles
-<div style="height:600px;overflow:scroll;">
-        <img src="/static/data/tilesets/images/{{tilesets[0]}}" id="tileset" onclick="getXY(16)" ondblclick="getTileprompt()">
-</div>
+
+  <div style="height:600px;overflow:scroll;">
+    <div class="tile-container">
+      <img src="/static/data/tilesets/images/{{tilesets[0]}}" id="tileset" onclick="getXY(16)" ondblclick="getTileprompt()">
+      <div class="tile-overlay"></div>
+    </div>
+  </div>
+  
+
 
 <br>
-Live coordinate : <a id="coordinate"></a>
+<input type="checkbox" id="gridtileset" onchange="updateGridTileset()" checked>
+<label for="gridtileset">Grid</label>
+Live coordinate : <a id="coordinate"></a><br>
+Double click to select multiple tiles
 <script>
     const image = document.getElementById("tileset");
     const coordinates = document.getElementById("coordinate");

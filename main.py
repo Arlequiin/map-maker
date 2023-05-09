@@ -16,11 +16,11 @@ async def index():
     tilesets = sorted(os.listdir('static/data/tilesets/images/'))
     return render_template("editor.html",tilesets=tilesets)
 
-@app.route("/selection/<string:x>/<string:y>/<string:option>/<string:tilesize>/")
-async def get_selection(x,y,option,tilesize):
-    tilesize=int(tilesize)
-    x,y = round_to(tilesize,int(x)), round_to(tilesize,int(y))
-    box = (x-tilesize, y-tilesize, x, y)
+@app.route("/selection/<string:x>/<string:y>/<string:option>/<string:tilesizex>/<string:tilesizey>/")
+async def get_selection(x,y,option,tilesizex,tilesizey):
+    tilesizex,tilesizey=int(tilesizex),int(tilesizey)
+    x,y = round_to(tilesizex,int(x)), round_to(tilesizey,int(y))
+    box = (x-tilesizex, y-tilesizey, x, y)
     return {'box': box}
 
 app.run(debug=True,host='0.0.0.0',port=random.randint(1000,9999))

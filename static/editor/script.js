@@ -28,7 +28,7 @@ function getXY(tilesize) {
     function handleMouseMove(event) {
         const x = event.offsetX;
         const y = event.offsetY;
-        fetch(`/selection/${x}/${y}/${dropdown}/${tilesize}`)
+        fetch(`/selection/${x}/${y}/${dropdown}/${tilesize}/${tilesize}`)
         .then(response => response.json())
         .then(data => {
             let style_rect = `width: 16px; height: 16px; object-position: -${data.box[0]}px -${data.box[1]}px; object-fit: none;`;
@@ -62,29 +62,42 @@ function updateGrid() {
   }
   
 
-//faire un fetch, un get answer pour regexer l'html et renvoyer une matrice de type [A51, A10...]
+  function updateGridTileset() {
+    const is_grid = document.getElementById('gridtileset').checked;
+    const tiles = document.querySelector('.tile-overlay');
+    
+    if (is_grid) {
+        tiles.style.zIndex = '5';
+    } else {
+        tiles.style.zIndex = '-1';
+    }
+  }
+  
 
 function getTileprompt() {
   let coord = prompt("Tile selection (eg. 2,3)");
+  coord = coord.split(",");
+  tilesizex = parseInt(coord[0])*16;
+  tilesizey = parseInt(coord[1])*16;
   const image = document.getElementById("tileset");
-  const coordinates = document.getElementById("coordinate");
-  let dropdown = document.getElementById('drop').value
-  function handleMouseMove(event) {
-      const x = event.offsetX;
-      const y = event.offsetY;
-      fetch(`/selection/${x}/${y}/${dropdown}/${coord}`)
-      .then(response => response.json())
-      .then(data => {
-          let style_rect = `width: 16px; height: 16px; object-position: -${data.box[0]}px -${data.box[1]}px; object-fit: none;`;
-          const img = document.getElementById("cropped-image");
-          img.src = `static/data/tilesets/images/${dropdown}`;
-          img.style=style_rect;
-          img.classList = []; 
-          img.classList.add(`${data.box[0]}|${data.box[1]}`)
-          //img.classList.add(`width: 16px; height: 16px; background-position: -${data.box[0]}px -${data.box[1]}px; background-image:url(${img.src})`)
-      })
-      .catch(error => console.error(error));
-      image.removeEventListener("mousemove", handleMouseMove);
-  }
-  image.addEventListener("mousemove", handleMouseMove); 
+    const coordinates = document.getElementById("coordinate");
+    let dropdown = document.getElementById('drop').value
+    function handleMouseMove(event) {
+        const x = event.offsetX;
+        const y = event.offsetY;
+        fetch(`/selection/${x}/${y}/${dropdown}/${tilesizex}/${tilesizey}`)
+        .then(response => response.json())
+        .then(data => {
+            let style_rect = `width: ${tilesizex}px; height: ${tilesizey}px; object-position: -${data.box[0]}px -${data.box[1]}px; object-fit: none;`;
+            const img = document.getElementById("cropped-image");
+            img.src = `/static/data/tilesets/images/${dropdown}`;
+            img.style=style_rect;
+            img.classList = []; 
+            img.classList.add(`${data.box[0]}|${data.box[1]}`)
+            //img.classList.add(`width: 16px; height: 16px; background-position: -${data.box[0]}px -${data.box[1]}px; background-image:url(${img.src})`)
+        })
+        .catch(error => console.error(error));
+        image.removeEventListener("mousemove", handleMouseMove);
+    }
+    image.addEventListener("mousemove", handleMouseMove); 
 }
