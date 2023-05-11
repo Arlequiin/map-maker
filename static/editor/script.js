@@ -48,6 +48,7 @@ const dropdown = document.getElementById('drop').value
             img.style=style_rect;
             img.classList = []; 
             img.classList.add(`${data.box[0]}|${data.box[1]}`)
+            document.getElementById("idc").textContent=`${data.box[0]/16+15*(data.box[1]/16)}`
         })
         .catch(error => console.error(error));
         tileset_img.removeEventListener("mousemove", handleMouseMove);
