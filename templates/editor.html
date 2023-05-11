@@ -18,7 +18,7 @@
 
   <div style="height:600px;overflow:scroll;">
     <div class="tile-container">
-      <img src="/static/data/tilesets/images/{{tilesets[0]}}" id="tileset" onclick="getXY(16)" ondblclick="getTileprompt()">
+      <img src="/static/data/tilesets/images/{{tilesets[0]}}" id="tileset" onclick="getXY()" ondblclick="getTileprompt()">
       <div class="tile-overlay"></div>
     </div>
   </div>
@@ -31,14 +31,10 @@
 Live coordinate : <a id="coordinate"></a><br>
 Double click to select multiple tiles
 <script>
-    const image = document.getElementById("tileset");
     const coordinates = document.getElementById("coordinate");
 
-    image.addEventListener("mousemove", function(event) {
-        const x = event.offsetX;
-        const y = event.offsetY;
-
-        coordinates.innerHTML = `X: ${x}, Y: ${y}`;
+    document.getElementById("tileset").addEventListener("mousemove", function(event) {
+        coordinates.innerHTML = `X: ${event.offsetX}, Y: ${event.offsetY}`;
     });
 </script>
 
@@ -76,7 +72,7 @@ Double click to select multiple tiles
           tile.setAttribute("onclick", `setSelected('${alphabet[i]}${j}')`);
           tile.classList.add("tile");
           container.appendChild(tile);
-          const image = document.createElement('img');
+          let image = document.createElement('img');
           tile.appendChild(image)
         }
       }
@@ -128,7 +124,7 @@ function setSelected(id) {
       }
   } 
   } else {
-    const image = selectedTile.getElementsByTagName('img')[0];
+    let image = selectedTile.getElementsByTagName('img')[0];
     if (croppedImage.complete) {
       if (selectedTile.classList.length==2){
         image.src = croppedImage.src;
@@ -238,6 +234,8 @@ async function importMap() {
     reader.onload = async function(event) {
       let fileContent = event.target.result;
       fileContent = fileContent.toString();
+      Classes = fileContent.split("tile");
+      console.log(Classes)
       fileContent = fileContent.split("tile");
       let dimensions = fileContent[0].split(",");
       resizeEditorNoLW(parseInt(dimensions[1]),parseInt(dimensions[0]))
@@ -256,14 +254,17 @@ async function importMap() {
         count++
         // middle tile
         let bg_style = `background-image:url(static/data/tilesets/images/${fileContent[count][0][0]}.png);width: 16px; height: 16px; background-position: -${fileContent[count][0][1][0]}px -${fileContent[count][0][1][1]}px;`
-
-       console.log(bg_style)
+        tile.classList.add("tile")
+        console.log(Classes[count].split(" ")[1])
+        tile.classList.add(Classes[count].split(" ")[1])
       tile.style=bg_style;
        // upper tile
         if (fileContent[count].length == 2) {
           let img_style = `width: 16px; height: 16px; object-position: -${fileContent[count][1][1][0]}px -${fileContent[count][1][1][1]}px; object-fit: none;`;
           tile.getElementsByTagName('img')[0].src=`static/data/tilesets/images/${fileContent[count][1][0]}.png`;
           tile.getElementsByTagName('img')[0].style=img_style
+          console.log("upper",Classes[count].split(" ")[2])
+          tile.classList.add(Classes[count].split(" ")[2])
         };
         
       });
