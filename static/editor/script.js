@@ -5,6 +5,10 @@ document.getElementById("tileset").addEventListener("mousemove", function(event)
     coordinates.innerHTML = `X: ${event.offsetX}, Y: ${event.offsetY}`;
 });
 
+function round_to(rounded, num) {
+  return parseInt(rounded * Math.ceil(parseFloat(num) / rounded));
+}
+
 function syncImage(){
     let dropdown = document.getElementById('drop')
     let image = document.getElementById('tileset')
@@ -119,7 +123,7 @@ function setGrid(width,length){
     for(let j = 0; j < width; j++) {
       const tile = document.createElement("div");
       tile.setAttribute("id", `${alphabet[i]}${j}`);
-      tile.setAttribute("title", `${alphabet[i]}${j}`);
+      tile.setAttribute("title", `${i}|${j}`);
       tile.setAttribute("onmouseout", `setDrawMode('${alphabet[i]}${j}')`);
       tile.setAttribute("onclick", `setSelected('${alphabet[i]}${j}')`);
       tile.classList.add("tile");
